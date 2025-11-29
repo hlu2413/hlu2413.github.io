@@ -157,7 +157,8 @@ main {
     margin: 0;
 }
 
-.conference-badge {
+.conference-badge,
+.lab-badge {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -171,6 +172,40 @@ main {
 
 .conference-badge span {
     color: white;
+}
+
+.lab-badge {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+}
+
+.lab-logo {
+    height: 35px;
+    width: auto;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.lab-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.lab-name {
+    font-weight: 700;
+    font-size: 1.05em;
+    color: white;
+}
+
+.supervisor {
+    font-size: 0.9em;
+    opacity: 0.95;
+    color: white;
+    font-weight: 500;
 }
 
 .icml-logo {
@@ -693,6 +728,14 @@ footer {
     .github-link {
         width: 100%;
         justify-content: center;
+    }
+    
+    .lab-badge {
+        width: 100%;
+    }
+    
+    .lab-info {
+        width: 100%;
     }
 }
 
