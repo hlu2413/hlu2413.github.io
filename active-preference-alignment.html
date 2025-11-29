@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Preference Alignment - Hengchang Lu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><a href="index.html">Hengchang Lu</a></h1>
+            <p class="subtitle">Research Profile</p>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="active-preference-alignment.html" class="active">Active Preference Alignment</a></li>
+            </ul>
+        </nav>
+        
+        <main>
+            <article class="research-article">
+                <div class="paper-header">
+                    <h2>Active Preference Alignment</h2>
+                    <div class="conference-badge">
+                        <img src="ICML-logo.png" alt="ICML Logo" class="icml-logo">
+                        <span>To be submitted to ICML 2026</span>
+                    </div>
+                </div>
+                
+                <div class="paper-links">
+                    <a href="Active_Preference_Alignment.pdf" class="pdf-link" target="_blank">
+                        📄 View Paper PDF <span class="note">(Writing in progress)</span>
+                    </a>
+                    <a href="https://github.com/yourusername/active-preference-alignment" class="github-link" target="_blank" rel="noopener noreferrer">
+                        <svg class="github-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        GitHub Repository
+                        <span class="note">(Code will be disclosed after submission)</span>
+                    </a>
+                </div>
+                
+                <section class="content-section">
+                    <h3>Problem Overview</h3>
+                    <p>Current AI alignment paradigms adopt a corrective approach. Instead of embedding safety in intelligence's substrate, these methods treat alignment as an adversarial, post-hoc stage. They sculpt outputs only after capabilities solidify. I contend this disjoint method relies on static proxy objectives. Training a single reward model to approximate monolithic human preferences fails to capture values' dynamic, partially-observable nature. The optimization process consequently becomes a game of exploiting this static proxy; policies push against divergence constraints to maximize scores. The result is a fragile alignment subject to reward misspecification and over-optimization, with models exploiting proxy metrics instead of internalizing underlying intent.</p>
+                    
+                    <p>Although these empirical methods drive rapid benchmark progress, treating alignment as purely corrective risks nonlinear scaling issues. Models already show emergent capabilities breaking training assumptions. To manage this, we must evolve beyond post-hoc fine-tuning and build alignment directly into the generative process.</p>
+                    
+                    <p>This conviction defines my research objective: building inherently aligned, natively steerable systems attuned to dynamic human preferences. My current research project stems from this principle. To overcome reward over-optimization and diversity loss in fine-tuning, I developed a theoretically grounded, training-free alignment method based on Sequential Monte Carlo sampling and Feynman-Kac Correctors. This framework rethinks alignment by integrating online preference signals directly into the latent generative process through stochastic dynamics. Unlike classifier guidance requiring specific discriminators, this method decouples the generative prior from the value-alignment likelihood. We guide generation with reward-tilted perturbations in real time, requiring only incremental, sparse, and partially-observable feedback from users with unknown preferences.</p>
+                    
+                    <p>Prepared for submission to ICML 2026, this solves alignment's optimal transport problem: shifting the pre-trained distribution to preferences while minimizing generative manifold distortion. This method provides principled control over the transport map, enabling fine-grained steering without retraining. In image generation with high-dimensional latent spaces, non-convex reward landscapes, and probabilistic transformations, the approach demonstrates robust convergence to high-reward regions while preserving distributional diversity. It maintains geometric coherence and semantic meaning, avoiding mode collapse and reward hacking. This proves a new paradigm where steerability is inherent.</p>
+                </section>
+                
+                <section class="content-section">
+                    <h3>Abstract</h3>
+                    <p>Diffusion models are highly effective at modeling complex data distributions, including images and text. However, in applications like personalized recommender systems, the objective often shifts to modeling specific regions of the distribution that maximize user preferences—initially unknown but gradually uncovered through interactive feedback. This can naturally be framed as a reinforcement learning problem, where the goal is to fine-tune a diffusion model to maximize a reward function based on preferences. However, the main challenge lies in learning a parameterized reward model, which typically requires large-scale preference data—something that is often not feasible in practice. In this work, we introduce a novel framework that bypasses the requirement for a pretrained reward model by directly optimizing the dynamics of the reverse diffusion process using real-time user feedback. Our framework enables feedback-efficient preference alignment, drawing inspiration from the Feynman-Kac-based Fokker-Planck framework. We demonstrate our framework's effectiveness through extensive experiments and ablation studies across diverse domains. Additionally, based on theoretical insights, we propose an enhanced fine-tuning strategy that requires less computational budget and accelerates the fine-tuning process, further boosting its suitability for real-world deployment.</p>
+                </section>
+                
+                <section class="content-section">
+                    <h3>Introduction</h3>
+                    <p>Diffusion models are powerful deep generative frameworks that synthesize data by reversing a diffusion process, enabling them to capture complex distributions such as natural image manifolds. Yet, in applications like personalized product recommendation, the goal shifts to steering generation toward items that match individual user preferences—preferences that gradually emerge from user interactions. Similar challenges occur in other domains. For example, diffusion models trained on large internet datasets are often used for image generation, but practical use cases demand outputs with specifically desired attributes, such as high aesthetic quality. Comparable situations arise in drug discovery, where generation must be guided toward molecules with strong bioactivity. These tasks can be formulated as reinforcement learning (RL) problems, where the diffusion model is fine-tuned to maximize a reward function encoding target properties or user preferences. However, RL-based methods typically require substantial preference data to learn accurate reward models, making them impractical for settings like personalized recommendation systems, where user feedback is limited and expensive to collect interactively.</p>
+                    
+                    <p>The challenge is twofold: Firstly, achieving this objective requires efficient exploration. However, in high-dimensional spaces, such as those of natural images, this goes beyond simply discovering new regions. It also necessitates respecting the structural constraints of the problem. For instance, in areas like product recommendation, valid solutions—such as realistic-looking products—are typically confined to a lower-dimensional manifold within a much larger design space. Therefore, an effective, feedback-efficient fine-tuning method must explore this space while staying within the feasible area, as venturing outside would lead to wasteful invalid queries. Moreover, fine-tuning the diffusion model to aggressively optimize based on the preferences collected so far can reduce sample diversity. This is because human preferences are often multimodal, and the model, if overly focused on a narrow set of preferences, may fail to capture the full spectrum of diverse user preferences, leading to a less varied sample generation. Therefore, efficient exploration is crucial to maintaining the quality of generated samples and ensuring greater diversity in sample generation.</p>
+                    
+                    <p>Secondly, a key challenge in many applications is the high cost of acquiring feedback for the ground-truth reward function. For instance, in a product recommendation system, determining user preferences requires subjective human judgment, which is both costly and time-consuming. This challenge is further compounded by the need for the model to not only explore new options but also to exploit the information it has gathered to generate samples that align with the user's preferences. If the model continues to explore without producing samples that meet the user's expectations, it risks disengaging the user. In a nutshell, the model must strike a balance between exploration and exploitation—effectively generating preference-aligned samples while minimizing costly reward queries. While several recent works have proposed RL-based fine-tuning methods for diffusion models, none directly tackle the challenge of feedback efficiency in an online setting. Uehera et. al. introduced a framework that accounts for the online nature of feedback but still relies on a separate parameterized reward model for optimization. Our goal instead is to develop a feedback-efficient online fine-tuning approach that entirely eliminates the need for a separate pre-trained reward model, instead directly leveraging inference time scaling of a base diffusion model using real-time user feedback.</p>
+                </section>
+                
+                <section class="content-section">
+                    <h3>Framework Architecture</h3>
+                    <p>Our framework integrates online preference signals directly into the latent generative process through stochastic dynamics, rethinking alignment by decoupling the generative prior from the value-alignment likelihood. The architecture consists of several interconnected components working together to achieve feedback-efficient preference alignment.</p>
+                    
+                    <div class="architecture-overview">
+                        <h4>System Components</h4>
+                        <div class="component-grid">
+                            <div class="component-card">
+                                <h5>Base Generative Model</h5>
+                                <p><strong>Stable Diffusion 1.5 (SD15)</strong> serves as the pre-trained diffusion model. The model operates in a latent space with shape (4, 64, 64) using a VAE scale factor of 0.18215. The UNet provides score functions for the reverse diffusion process, and we use the EulerAncestralDiscreteScheduler for timestep management.</p>
+                            </div>
+                            
+                            <div class="component-card">
+                                <h5>Feynman-Kac Corrector (FKC)</h5>
+                                <p>The core alignment mechanism that modifies the reverse diffusion process. At each timestep <em>t</em>, it computes a modified drift term that incorporates reward gradients and diversity terms, enabling real-time steering without model retraining.</p>
+                            </div>
+                            
+                            <div class="component-card">
+                                <h5>Surrogate Reward Model</h5>
+                                <p>A lightweight neural network (<strong>LatentSurrogate</strong>) that learns to approximate user preferences from sparse feedback. Architecture: Conv2d(4→128) → AdaptiveAvgPool2d → MLP(128→256→128→1). Trained online using Adam optimizer (lr=1e-3) on historical preference data.</p>
+                            </div>
+                            
+                            <div class="component-card">
+                                <h5>Preference Proxy</h5>
+                                <p><strong>OpenCLIP (ViT-L-14)</strong> provides preference scoring by computing image-text similarity. Supports multi-user preferences through a prompt bank system. Uses temperature-scaled softmax (temperature=10.0) to convert similarities to preference scores.</p>
+                            </div>
+                            
+                            <div class="component-card">
+                                <h5>Sequential Monte Carlo</h5>
+                                <p>Maintains a particle ensemble with importance weights <em>w</em>. Particles are tracked through the diffusion process, with weights updated based on reward signals and drift interactions. Historical particles are maintained for diversity computation.</p>
+                            </div>
+                            
+                            <div class="component-card">
+                                <h5>Diversity Mechanism</h5>
+                                <p>Computes normalized L2 squared distance gradients between particles to prevent mode collapse. Can incorporate historical particles for long-term diversity. Controlled by a binary flag and gamma schedule parameter.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="framework-diagram">
+                        <h4>Architecture Flow</h4>
+                        <div class="diagram-container">
+                            <div class="framework-box">
+                                <div class="box-header">Initialization Phase</div>
+                                <div class="box-content">
+                                    <div class="process-flow">
+                                        <div class="flow-step">Prompt</div>
+                                        <div class="flow-arrow">→</div>
+                                        <div class="flow-step">SD15</div>
+                                        <div class="flow-arrow">→</div>
+                                        <div class="flow-step">z_0</div>
+                                    </div>
+                                    <p class="flow-desc">Generate initial latents from prompt-conditioned SD15, add noise to match initial timestep</p>
+                                </div>
+                            </div>
+                            
+                            <div class="framework-box">
+                                <div class="box-header">FKC Simulation Loop</div>
+                                <div class="box-content">
+                                    <div class="corrector-process">
+                                        <div class="process-item">1. Standard Denoising</div>
+                                        <div class="process-item">2. Reward Gradient</div>
+                                        <div class="process-item">3. Diversity Gradient</div>
+                                        <div class="process-item">4. FKC Drift</div>
+                                        <div class="process-item">5. Weight Update</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="framework-box">
+                                <div class="box-header">Feedback Collection</div>
+                                <div class="box-content">
+                                    <div class="feedback-flow">
+                                        <div class="feedback-item">Decode Latents</div>
+                                        <div class="feedback-item">OpenCLIP Scoring</div>
+                                        <div class="feedback-item">Update Surrogate</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="diagram-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #4a90e2;"></div>
+                                <span>Generative Process</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #50c878;"></div>
+                                <span>Alignment Mechanism</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #ff6b6b;"></div>
+                                <span>Feedback Integration</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detailed-algorithm">
+                        <h4>Detailed Algorithm</h4>
+                        <div class="algorithm-steps">
+                            <div class="algorithm-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h5>Standard Denoising Step</h5>
+                                    <p>For each timestep <em>t</em>, compute the baseline score function <em>score = -ε/σ_t</em> using the UNet. Perform a standard denoising step to obtain a clean latent estimate <em>z_t_clean</em> using Tweedie's formula: <em>z_0_estimate = z_t + σ_t² · score</em>. This clean state is used for reward computation as it matches the reward model's training distribution.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="algorithm-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h5>Reward Gradient Computation</h5>
+                                    <p>Compute reward gradients on the clean latent: <em>r_grad = ∇_z r(z_t_clean)</em> where <em>r</em> is the surrogate reward model. The gradient is computed via automatic differentiation, enabling end-to-end gradient flow through the reward network.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="algorithm-step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h5>Diversity Gradient Computation</h5>
+                                    <p>Compute diversity loss gradient: <em>div_grad = ∇_z L_div(z_t_clean, historical_particles)</em> where <em>L_div</em> is the normalized L2 squared distance loss. The gradient encourages particles to maintain distance from each other and historical samples, preventing mode collapse. The combined gradient is: <em>combined_r_grad = r_grad + γ_t · div_grad</em>.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="algorithm-step">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <h5>FKC Drift Construction</h5>
+                                    <p>Construct the FKC-modified drift term on the original noisy latent <em>z_t</em>:</p>
+                                    <div class="formula-box">
+                                        <em>drift_fkc = σ_t²(score + (β_t/2)(r_grad + γ_t·∇div)) - f_t</em>
+                                    </div>
+                                    <p>where <em>f_t</em> is the baseline drift derived from the scheduler. Convert to noise prediction format: <em>noise_pred_fkc = -drift_fkc / σ_t</em> and apply via scheduler step.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="algorithm-step">
+                                <div class="step-number">5</div>
+                                <div class="step-content">
+                                    <h5>Weight Update</h5>
+                                    <p>Update particle weights using the Feynman-Kac weight equation:</p>
+                                    <div class="formula-box">
+                                        <em>dw = (∂β_t/∂t)·r(z_t)·dt - ⟨β_t·∇(r + γ_t·∇div), f_t⟩·dt + ⟨β_t·∇(r + γ_t·∇div), (σ_t²/2)·score⟩·dt</em>
+                                    </div>
+                                    <p>Weights are clamped to [-100, 100] during updates, then normalized to [0, 1] at the end of simulation.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="algorithm-step">
+                                <div class="step-number">6</div>
+                                <div class="step-content">
+                                    <h5>Feedback Collection & Model Update</h5>
+                                    <p>After FKC simulation, decode latents to images, score using OpenCLIP, and update the surrogate reward model. Training uses batched Adam optimization (batch_size=32) over all historical data for 200 epochs per iteration.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setup-details">
+                        <h4>Experimental Setup</h4>
+                        <div class="setup-grid">
+                            <div class="setup-card">
+                                <h5>Hardware & Device</h5>
+                                <ul>
+                                    <li><strong>Device:</strong> CUDA-enabled GPU (automatic fallback to CPU)</li>
+                                    <li><strong>Memory Optimization:</strong> Attention slicing, VAE slicing, VAE tiling enabled</li>
+                                    <li><strong>Batch Processing:</strong> Configurable batch sizes for memory efficiency (default: 8 for generation, 32 for training)</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="setup-card">
+                                <h5>Model Configuration</h5>
+                                <ul>
+                                    <li><strong>Base Model:</strong> Stable Diffusion 1.5 (runwayml/stable-diffusion-v1-5)</li>
+                                    <li><strong>Scheduler:</strong> EulerAncestralDiscreteScheduler</li>
+                                    <li><strong>Latent Shape:</strong> (4, 64, 64) channels × height × width</li>
+                                    <li><strong>VAE Scale Factor:</strong> 0.18215</li>
+                                    <li><strong>Precision:</strong> FP16 on CUDA, FP32 on CPU</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="setup-card">
+                                <h5>Hyperparameters</h5>
+                                <ul>
+                                    <li><strong>n_particles:</strong> Number of particles in ensemble (default: 32)</li>
+                                    <li><strong>n_steps:</strong> Diffusion timesteps (default: 25)</li>
+                                    <li><strong>k_observe:</strong> Number of particles to observe per iteration (default: 8)</li>
+                                    <li><strong>B:</strong> Total feedback budget (default: 80)</li>
+                                    <li><strong>temperature:</strong> OpenCLIP softmax temperature (default: 10.0)</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="setup-card">
+                                <h5>Schedule Parameters</h5>
+                                <ul>
+                                    <li><strong>β schedule:</strong> Linear from β_min=0.5 to β_max=2.0 over total steps</li>
+                                    <li><strong>γ schedule:</strong> Linear from γ_max=0.05 to γ_min=0.0 over total steps</li>
+                                    <li><strong>β_dot:</strong> Rate of change of beta (default: 1.0)</li>
+                                    <li><strong>diversity_enabled:</strong> Binary flag (default: False in image experiments)</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="setup-card">
+                                <h5>Training Configuration</h5>
+                                <ul>
+                                    <li><strong>Optimizer:</strong> Adam with lr=1e-3</li>
+                                    <li><strong>Training Epochs:</strong> 200 per iteration</li>
+                                    <li><strong>Batch Size:</strong> 32 for reward model training</li>
+                                    <li><strong>Loss Function:</strong> Mean squared error between predicted and observed rewards</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="setup-card">
+                                <h5>Preference System</h5>
+                                <ul>
+                                    <li><strong>CLIP Model:</strong> OpenCLIP ViT-L-14 (openai pretrained)</li>
+                                    <li><strong>Scoring:</strong> Temperature-scaled softmax over prompt bank similarities</li>
+                                    <li><strong>Multi-user Support:</strong> Union scoring (max over user preferences)</li>
+                                    <li><strong>Default Users:</strong> apple, grape, banana preferences</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="framework-details">
+                        <div class="detail-card">
+                            <h4>Optimal Transport Problem</h4>
+                            <p>Shifts the pre-trained distribution to preferences while minimizing generative manifold distortion. Provides principled control over the transport map, enabling fine-grained steering without retraining. The FKC drift term directly implements the transport map modification.</p>
+                        </div>
+                        
+                        <div class="detail-card">
+                            <h4>Training-Free Alignment</h4>
+                            <p>Eliminates the need for a separate pre-trained reward model. The surrogate model learns online from sparse feedback, while the base diffusion model remains frozen. Alignment occurs entirely at inference time through FKC modifications to the reverse diffusion process.</p>
+                        </div>
+                        
+                        <div class="detail-card">
+                            <h4>Diversity Preservation</h4>
+                            <p>Maintains geometric coherence and semantic meaning, avoiding mode collapse and reward hacking. The diversity gradient term encourages particle separation in latent space, while historical particle tracking ensures long-term diversity. Demonstrates robust convergence to high-reward regions while preserving distributional diversity.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mathematical-framework">
+                        <h4>Mathematical Foundation</h4>
+                        <div class="math-box">
+                            <p>The framework solves the alignment problem through the Feynman-Kac formalism:</p>
+                            <ul class="math-list">
+                                <li><strong>Decoupling:</strong> Generative prior <em>p(z)</em> (from SD15) is separated from value-alignment likelihood <em>L(r|z)</em> (from surrogate model)</li>
+                                <li><strong>FKC Drift:</strong> <em>dz = [σ_t²(score + (β_t/2)(∇r + γ_t·∇div)) - f_t] dt + σ_t dW_t</em></li>
+                                <li><strong>Weight Evolution:</strong> <em>dw = (∂β_t/∂t)·r·dt - ⟨β_t·∇(r+γ_t·∇div), f_t⟩·dt + ⟨β_t·∇(r+γ_t·∇div), (σ_t²/2)·score⟩·dt</em></li>
+                                <li><strong>Sequential Monte Carlo:</strong> Particles <em>z_i</em> with weights <em>w_i</em> are evolved through the SDE, with resampling implicit in weight updates</li>
+                                <li><strong>Diversity Loss:</strong> <em>L_div(z_i) = (1/d)·(1/(n-1))·∑_{j≠i} ||z_i - z_j||²</em> normalized by latent dimension <em>d</em></li>
+                                <li><strong>Reward Approximation:</strong> Surrogate model <em>r_θ(z)</em> learns from historical feedback pairs <em>(z, r_true)</em> via MSE loss</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 Hengchang Lu. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
+
